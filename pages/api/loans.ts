@@ -1,16 +1,16 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from "next";
 
-import camelcaseKeys from 'camelcase-keys'
+import camelcaseKeys from "camelcase-keys";
 
-import { getClient } from 'src/database'
+import { getClient } from "src/database";
 
 export default async function handler(
-  _req: NextApiRequest,
+  req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const client = getClient()
+  const client = getClient();
   try {
-    await client.connect()
+    await client.connect();
     const result = await client.query(`
         select
             t1.*,
@@ -24,13 +24,14 @@ export default async function handler(
             on t1.address_id = t2.id
         left join company t3
             on t1.company_id = t3.id
-        `)
+        
+        `);
 
-    res.status(200).json([camelcaseKeys(result.rows), result.rowCount])
+    res.status(200).json([camelcaseKeys(result.rows), result.rowCount]);
   } catch (err: any) {
-      console.log(err)
-    res.status(500).send(err.message)
+    console.log(err);
+    res.status(500).send(err.message);
   } finally {
-    await client.end()
+    await client.end();
   }
 }
