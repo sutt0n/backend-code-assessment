@@ -14,6 +14,18 @@ export default async function handler(
 
     const page = +req.query.page;
     const pageSize = +req.query.pageSize;
+    const searchTerm = req.query.searchTerm;
+
+    let whereClause = '';
+
+    if(searchTerm) {
+      whereClause = `
+      where
+        t3.name ilike '${searchTerm}%'
+        OR
+        t2.city ilike '${searchTerm}%'
+      `
+    }
 
     const result = await client.query(`
       select
@@ -29,6 +41,7 @@ export default async function handler(
           on t1.address_id = t2.id
       left join company t3
           on t1.company_id = t3.id
+      ${whereClause}
       limit ${pageSize} offset ${page * pageSize}
         `);
 

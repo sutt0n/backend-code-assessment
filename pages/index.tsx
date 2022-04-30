@@ -14,8 +14,8 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import SearchIcon from "@mui/icons-material/Search";
 
-async function getLoans(page: number = 0, pageSize: number = 10): Promise<any> {
-  const res = await fetch(`/api/loans?page=${page}&pageSize=${pageSize}`);
+async function getLoans(page: number = 0, pageSize: number = 10, searchTerm = ''): Promise<any> {
+  const res = await fetch(`/api/loans?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}`);
   return res.json();
 }
 
@@ -36,8 +36,8 @@ const Home: NextPage = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data } = useQuery(["loans", page, pageSize], () =>
-    getLoans(page, pageSize),
+  const { data } = useQuery(["loans", page, pageSize, searchTerm], () =>
+    getLoans(page, pageSize, searchTerm),
     { keepPreviousData: true },
   );
   const [rows, rowCount] = data ?? [[], 0];
@@ -52,6 +52,7 @@ const Home: NextPage = () => {
           label="Search"
           placeholder="search by address or company..."
           sx={{ width: 350, marginBottom: 4}}
+          onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
