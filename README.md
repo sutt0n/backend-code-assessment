@@ -22,7 +22,7 @@ You should see a table with some rows in it. There's just one problem -- the pag
 
 - re-write the api endpoint
 
-Under api/loans you should see the loans controller. Re-write it in such a way that it acceps "page" and "pageSize" in the query.
+Under api/loans you should see the loans controller. Re-write it in such a way that it accepts "page" and "pageSize" in the query.
 Manipulate your query so that these variables handle pagination.
 
 You can use any ORM or SQL generator you would like.
