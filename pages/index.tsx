@@ -37,7 +37,8 @@ const Home: NextPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data } = useQuery(["loans", page, pageSize], () =>
-    getLoans(page, pageSize)
+    getLoans(page, pageSize),
+    { keepPreviousData: true },
   );
   const [rows, rowCount] = data ?? [[], 0];
 
@@ -66,6 +67,7 @@ const Home: NextPage = () => {
           rowCount={rowCount}
           page={page}
           pageSize={pageSize}
+          paginationMode="server"
           onPageSizeChange={(pageSize) => setPageSize(pageSize)}
           onPageChange={(page) => setPage(page)}
         />
