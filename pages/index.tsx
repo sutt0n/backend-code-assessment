@@ -41,12 +41,28 @@ const Home: NextPage = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loanTotal, setLoanTotal] = useState(0);
 
   const { data } = useQuery(
     ["loans", page, pageSize, searchTerm],
-    () => getLoans(page, pageSize, searchTerm),
+    async () => {
+      setLoanTotal(0);
+
+      const [rows, rowCount] = await getLoans(page, pageSize, searchTerm);
+
+      let sumLoanAmount = 0;
+
+      rows.forEach((row:any) => {
+        sumLoanAmount += row.amount;
+      });
+
+      setLoanTotal(sumLoanAmount);
+
+      return [rows, rowCount];
+    },
     { keepPreviousData: true }
   );
+  
   const [rows, rowCount] = data ?? [[], 0];
 
   return (
@@ -68,6 +84,16 @@ const Home: NextPage = () => {
             ),
           }}
         />
+        <Box
+          component="div"
+          sx={{
+            paddingTop: "1em",
+            paddingLeft: "1em",
+            display: "inline-block",
+          }}
+        >
+          Loan Total: {loanTotal}
+        </Box>
         <DataGrid
           rows={rows}
           columns={columns}
