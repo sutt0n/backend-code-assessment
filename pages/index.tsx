@@ -56,10 +56,7 @@ const Home: NextPage = () => {
 
       let sumLoanAmount = totalLoanAmount || 0;
 
-      console.log('sumLoanAmount', sumLoanAmount);
-
       if (!sumLoanAmount) {
-        console.log('calculating sum loan amount');
         rows.forEach((row: any) => {
           sumLoanAmount += row.amount;
         });
