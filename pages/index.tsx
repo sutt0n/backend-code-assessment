@@ -48,13 +48,22 @@ const Home: NextPage = () => {
     async () => {
       setLoanTotal(0);
 
-      const [rows, rowCount] = await getLoans(page, pageSize, searchTerm);
+      const [rows, rowCount, totalLoanAmount] = await getLoans(
+        page,
+        pageSize,
+        searchTerm
+      );
 
-      let sumLoanAmount = 0;
+      let sumLoanAmount = totalLoanAmount || 0;
 
-      rows.forEach((row:any) => {
-        sumLoanAmount += row.amount;
-      });
+      console.log('sumLoanAmount', sumLoanAmount);
+
+      if (!sumLoanAmount) {
+        console.log('calculating sum loan amount');
+        rows.forEach((row: any) => {
+          sumLoanAmount += row.amount;
+        });
+      }
 
       setLoanTotal(sumLoanAmount);
 
@@ -62,7 +71,7 @@ const Home: NextPage = () => {
     },
     { keepPreviousData: true }
   );
-  
+
   const [rows, rowCount] = data ?? [[], 0];
 
   return (
